@@ -6,6 +6,8 @@ namespace PVfinal.Views
     {
         public AboutPage()
         {
+            Title = "About Page";
+
             // Vytváření StackLayoutu
             var layout = new StackLayout
             {

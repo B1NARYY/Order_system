@@ -12,8 +12,6 @@ namespace PVfinal
         public App()
         {
             InitializeComponent();
-
-            DependencyService.Register<IItemStore, MockDataStore>();
             MainPage = new AppShell();
         }
         protected override void OnStart()
