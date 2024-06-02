@@ -1,14 +1,12 @@
-﻿using PVfinal.DAO;
-using PVfinal.Models;
+﻿using PVfinal.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 
-namespace PVfinal.DAOs
+namespace PVfinal.DAO
 {
     public class OrderDAO
     {
-        // Method to get all orders
         public static List<OrderModel> GetAllOrders()
         {
             List<OrderModel> orders = new List<OrderModel>();
@@ -37,8 +35,33 @@ namespace PVfinal.DAOs
             return orders;
         }
 
-        // Method to add an order
-        public void AddOrder(OrderModel order)
+        public static OrderModel GetOrder(int id)
+        {
+            using (SqlConnection conn = DatabaseSingleton.GetInstance())
+            {
+                string query = "SELECT * FROM Orders WHERE id = @orderId";
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@orderId", id);
+
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    return new OrderModel
+                    {
+                        Id = Convert.ToInt32(reader["id"]),
+                        OrderDate = Convert.ToDateTime(reader["order_date"]),
+                        UserId = Convert.ToInt32(reader["user_id"])
+                    };
+                }
+
+                reader.Close();
+            }
+
+            return null;
+        }
+
+        public static void AddOrder(OrderModel order)
         {
             using (SqlConnection conn = DatabaseSingleton.GetInstance())
             {
@@ -51,8 +74,7 @@ namespace PVfinal.DAOs
             Console.WriteLine("Order added successfully");
         }
 
-        // Method to update an order
-        public void UpdateOrder(OrderModel order)
+        public static void UpdateOrder(OrderModel order)
         {
             using (SqlConnection conn = DatabaseSingleton.GetInstance())
             {
@@ -66,8 +88,7 @@ namespace PVfinal.DAOs
             Console.WriteLine("Order updated successfully");
         }
 
-        // Method to delete an order
-        public void DeleteOrder(int orderId)
+        public static void DeleteOrder(int orderId)
         {
             using (SqlConnection conn = DatabaseSingleton.GetInstance())
             {

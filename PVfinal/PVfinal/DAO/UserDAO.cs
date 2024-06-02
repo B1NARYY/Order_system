@@ -1,14 +1,12 @@
-﻿using PVfinal.DAO;
-using PVfinal.Models;
+﻿using PVfinal.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 
-namespace PVfinal.DAOs
+namespace PVfinal.DAO
 {
     public class UserDAO
     {
-        // Method to get all users
         public static List<UserModel> GetAllUsers()
         {
             List<UserModel> users = new List<UserModel>();
@@ -37,8 +35,33 @@ namespace PVfinal.DAOs
             return users;
         }
 
-        // Method to add a user
-        public void AddUser(UserModel user)
+        public static UserModel GetUser(int id)
+        {
+            using (SqlConnection conn = DatabaseSingleton.GetInstance())
+            {
+                string query = "SELECT * FROM Users WHERE id = @userId";
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@userId", id);
+
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    return new UserModel
+                    {
+                        Id = Convert.ToInt32(reader["id"]),
+                        Username = reader["username"].ToString(),
+                        Balance = Convert.ToDecimal(reader["balance"])
+                    };
+                }
+
+                reader.Close();
+            }
+
+            return null;
+        }
+
+        public static void AddUser(UserModel user)
         {
             using (SqlConnection conn = DatabaseSingleton.GetInstance())
             {
@@ -51,8 +74,7 @@ namespace PVfinal.DAOs
             Console.WriteLine("User added successfully");
         }
 
-        // Method to update a user
-        public void UpdateUser(UserModel user)
+        public static void UpdateUser(UserModel user)
         {
             using (SqlConnection conn = DatabaseSingleton.GetInstance())
             {
@@ -66,8 +88,7 @@ namespace PVfinal.DAOs
             Console.WriteLine("User updated successfully");
         }
 
-        // Method to delete a user
-        public void DeleteUser(int userId)
+        public static void DeleteUser(int userId)
         {
             using (SqlConnection conn = DatabaseSingleton.GetInstance())
             {

@@ -1,22 +1,35 @@
-﻿using PVfinal.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using PVfinal.Models;
+using PVfinal.DAO;
 
 namespace PVfinal.Services
 {
-    public class ItemService
+    public class ItemService : IItemStore
     {
-
-        public Task<List<ItemModel>> GetItemsAsync()
+        public async Task<IEnumerable<ItemModel>> GetItemsAsync()
         {
-            // Simulace získání položek z databáze
-            return Task.FromResult(new List<ItemModel>
-            {
-                new ItemModel { Id = 1, ItemName = "Notebook", Price = 1200.99m },
-                new ItemModel { Id = 2, ItemName = "Pen", Price = 3.45m }
-            });
+            return await Task.Run(() => ItemDAO.GetAllItems());
+        }
+
+        public async Task<ItemModel> GetItemAsync(int id)
+        {
+            return await Task.Run(() => ItemDAO.GetItem(id));
+        }
+
+        public async Task AddItemAsync(ItemModel item)
+        {
+            await Task.Run(() => ItemDAO.AddItem(item));
+        }
+
+        public async Task UpdateItemAsync(ItemModel item)
+        {
+            await Task.Run(() => ItemDAO.UpdateItem(item));
+        }
+
+        public async Task DeleteItemAsync(int id)
+        {
+            await Task.Run(() => ItemDAO.DeleteItem(id));
         }
     }
 }

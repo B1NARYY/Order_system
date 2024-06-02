@@ -1,28 +1,36 @@
-﻿using PVfinal.Models;
-using PVfinal.Services;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Text;
+﻿using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using Xamarin.Forms;
+using PVfinal.Models;
+using PVfinal.Services;
 
 namespace PVfinal.ViewModels
 {
-    public class MainViewModel : BindableObject
+    public class MainViewModel : BaseViewModel
     {
         private readonly UserService _userService;
-        public ObservableCollection<UserModel> Users { get; }
+        private ObservableCollection<UserModel> _users;
 
         public MainViewModel()
         {
             _userService = new UserService();
-            Users = new ObservableCollection<UserModel>();
-            LoadUsersAsync();
+            _users = new ObservableCollection<UserModel>();
+
+            LoadUsersCommand = new Command(async () => await LoadUsersAsync());
         }
 
-        private async void LoadUsersAsync()
+        public ObservableCollection<UserModel> Users
+        {
+            get => _users;
+            set => SetProperty(ref _users, value);
+        }
+
+        public Command LoadUsersCommand { get; }
+
+        private async Task LoadUsersAsync()
         {
             var users = await _userService.GetUsersAsync();
+            Users.Clear();
             foreach (var user in users)
             {
                 Users.Add(user);

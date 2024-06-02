@@ -1,28 +1,35 @@
-﻿using PVfinal.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using PVfinal.Models;
+using PVfinal.DAO;
 
 namespace PVfinal.Services
 {
     public class UserService
     {
-
-        public Task<List<UserModel>> GetUsersAsync()
+        public async Task<IEnumerable<UserModel>> GetUsersAsync()
         {
-            // Simulace získání dat z databáze
-            return Task.FromResult(new List<UserModel>
-            {
-                new UserModel { Id = 1, Username = "Petr", Balance = 100.00m },
-                new UserModel { Id = 2, Username = "Jana", Balance = 150.75m }
-            });
+            return await Task.Run(() => UserDAO.GetAllUsers());
         }
 
-        public Task AddUserAsync(UserModel user)
+        public async Task<UserModel> GetUserAsync(int id)
         {
-            // Simulace přidání uživatele do databáze
-            return Task.CompletedTask;
+            return await Task.Run(() => UserDAO.GetUser(id));
+        }
+
+        public async Task AddUserAsync(UserModel user)
+        {
+            await Task.Run(() => UserDAO.AddUser(user));
+        }
+
+        public async Task UpdateUserAsync(UserModel user)
+        {
+            await Task.Run(() => UserDAO.UpdateUser(user));
+        }
+
+        public async Task DeleteUserAsync(int id)
+        {
+            await Task.Run(() => UserDAO.DeleteUser(id));
         }
     }
 }

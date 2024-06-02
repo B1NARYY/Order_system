@@ -1,16 +1,21 @@
 ﻿using Xamarin.Forms;
 using PVfinal.ViewModels;
+using PVfinal.Models;
 
 namespace PVfinal.Views
 {
     public class MainPage : ContentPage
     {
+        private readonly MainViewModel _viewModel;
+
         public MainPage()
         {
-            Title = "Main Page";
-            BindingContext = new MainViewModel();
+            _viewModel = new MainViewModel();
+            BindingContext = _viewModel;
 
-            var collectionView = new CollectionView
+            Title = "Main Page";
+
+            var usersListView = new ListView
             {
                 ItemTemplate = new DataTemplate(() =>
                 {
@@ -20,19 +25,33 @@ namespace PVfinal.Views
                     var balanceLabel = new Label();
                     balanceLabel.SetBinding(Label.TextProperty, new Binding("Balance", stringFormat: "{0:C}"));
 
-                    return new StackLayout
+                    return new ViewCell
                     {
-                        Orientation = StackOrientation.Horizontal,
-                        Children = { nameLabel, balanceLabel }
+                        View = new StackLayout
+                        {
+                            Orientation = StackOrientation.Horizontal,
+                            Children = { nameLabel, balanceLabel }
+                        }
                     };
                 })
             };
-            collectionView.SetBinding(ItemsView.ItemsSourceProperty, "Users");
+            usersListView.SetBinding(ListView.ItemsSourceProperty, nameof(MainViewModel.Users));
+            usersListView.ItemTapped += OnUserTapped;
 
             Content = new StackLayout
             {
-                Children = { collectionView }
+                Children = { usersListView }
             };
+
+            _viewModel.LoadUsersCommand.Execute(null);
+        }
+
+        private async void OnUserTapped(object sender, ItemTappedEventArgs e)
+        {
+            if (e.Item is UserModel user)
+            {
+                await Navigation.PushAsync(new OrderPage(user));
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Data.SqlClient;
+﻿using System;
+using System.Data.SqlClient;
 
 namespace PVfinal.DAO
 {
@@ -14,17 +15,25 @@ namespace PVfinal.DAO
         {
             if (conn == null)
             {
-                SqlConnectionStringBuilder consStringBuilder = new SqlConnectionStringBuilder();
-
-                // Nastavení parametrů natvrdo
-                consStringBuilder.UserID = "holy2";
-                consStringBuilder.Password = "holy2";
-                consStringBuilder.InitialCatalog = "holy2";
-                consStringBuilder.DataSource = "193.85.203.188";
-                consStringBuilder.ConnectTimeout = 30;
+                SqlConnectionStringBuilder consStringBuilder = new SqlConnectionStringBuilder
+                {
+                    UserID = "holy2",
+                    Password = "holy2",
+                    InitialCatalog = "holy2",
+                    DataSource = "193.85.203.188",
+                    ConnectTimeout = 30
+                };
 
                 conn = new SqlConnection(consStringBuilder.ConnectionString);
-                conn.Open();
+                try
+                {
+                    conn.Open(); 
+                }
+                catch (SqlException ex)
+                {
+                    Console.WriteLine("Error opening connection: " + ex.Message);
+                    conn = null; 
+                }
             }
             return conn;
         }
@@ -35,7 +44,7 @@ namespace PVfinal.DAO
             {
                 conn.Close();
                 conn.Dispose();
-                conn = null; // Reset the connection to ensure it can be recreated later
+                conn = null; 
             }
         }
     }

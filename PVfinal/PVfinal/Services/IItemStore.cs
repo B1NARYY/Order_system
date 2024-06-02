@@ -7,8 +7,9 @@ namespace PVfinal.Services
     public interface IItemStore
     {
         Task<IEnumerable<ItemModel>> GetItemsAsync();
-        Task<bool> AddItemAsync(ItemModel item);
-        Task<bool> UpdateItemAsync(ItemModel item);
-        Task<bool> DeleteItemAsync(int id);
+        Task<ItemModel> GetItemAsync(int id);
+        Task AddItemAsync(ItemModel item);
+        Task UpdateItemAsync(ItemModel item);
+        Task DeleteItemAsync(int id);
     }
 }

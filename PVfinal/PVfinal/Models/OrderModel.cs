@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace PVfinal.Models
 {
@@ -9,6 +8,6 @@ namespace PVfinal.Models
         public int Id { get; set; }
         public DateTime OrderDate { get; set; }
         public int UserId { get; set; }
-
+        public List<OrderItemModel> OrderItems { get; set; } = new List<OrderItemModel>();
     }
 }

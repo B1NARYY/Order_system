@@ -16,7 +16,7 @@ namespace PVfinal.DAO
             {
                 string query = "SELECT * FROM Items";
                 SqlCommand cmd = new SqlCommand(query, conn);
-                
+
                 SqlDataReader reader = cmd.ExecuteReader();
 
                 while (reader.Read())
@@ -36,10 +36,37 @@ namespace PVfinal.DAO
             return items;
         }
 
-        // Method to add an item
-        public void AddItem(ItemModel item)
+        // Method to get a single item by id
+        public static ItemModel GetItem(int id)
         {
-            using(SqlConnection conn = DatabaseSingleton.GetInstance())
+            using (SqlConnection conn = DatabaseSingleton.GetInstance())
+            {
+                string query = "SELECT * FROM Items WHERE id = @itemId";
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@itemId", id);
+
+                SqlDataReader reader = cmd.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    return new ItemModel
+                    {
+                        Id = Convert.ToInt32(reader["id"]),
+                        ItemName = reader["item_name"].ToString(),
+                        Price = Convert.ToDecimal(reader["price"])
+                    };
+                }
+
+                reader.Close();
+            }
+
+            return null;
+        }
+
+        // Method to add an item
+        public static void AddItem(ItemModel item)
+        {
+            using (SqlConnection conn = DatabaseSingleton.GetInstance())
             {
                 string query = "INSERT INTO Items (item_name, price) VALUES (@itemName, @price)";
                 SqlCommand cmd = new SqlCommand(query, conn);
@@ -51,7 +78,7 @@ namespace PVfinal.DAO
         }
 
         // Method to update an item
-        public void UpdateItem(ItemModel item)
+        public static void UpdateItem(ItemModel item)
         {
             using (SqlConnection conn = DatabaseSingleton.GetInstance())
             {
@@ -66,7 +93,7 @@ namespace PVfinal.DAO
         }
 
         // Method to delete an item
-        public void DeleteItem(int itemId)
+        public static void DeleteItem(int itemId)
         {
             using (SqlConnection conn = DatabaseSingleton.GetInstance())
             {
