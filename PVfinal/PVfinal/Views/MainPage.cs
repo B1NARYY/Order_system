@@ -13,7 +13,7 @@ namespace PVfinal.Views
             _viewModel = new MainViewModel();
             BindingContext = _viewModel;
 
-            Title = "Main Page";
+            Title = "Zákazníci";
 
             var usersListView = new ListView
             {
@@ -38,9 +38,29 @@ namespace PVfinal.Views
             usersListView.SetBinding(ListView.ItemsSourceProperty, nameof(MainViewModel.Users));
             usersListView.ItemTapped += OnUserTapped;
 
+            var addButton = new Button
+            {
+                Text = "Přidat zákazníka",
+                Command = new Command(OnAddUser)
+            };
+
+            var removeButton = new Button
+            {
+                Text = "Odebrat zákazníka",
+                Command = new Command(OnRemoveUser)
+            };
+
             Content = new StackLayout
             {
-                Children = { usersListView }
+                Children =
+                {
+                    usersListView,
+                    new StackLayout
+                    {
+                        Orientation = StackOrientation.Horizontal,
+                        Children = { addButton, removeButton }
+                    }
+                }
             };
 
             _viewModel.LoadUsersCommand.Execute(null);
@@ -51,6 +71,25 @@ namespace PVfinal.Views
             if (e.Item is UserModel user)
             {
                 await Navigation.PushAsync(new OrderPage(user));
+            }
+        }
+
+        private async void OnAddUser()
+        {
+            string username = await DisplayPromptAsync("Přidat zákazníka", "Zadejte jméno zákazníka:");
+            if (!string.IsNullOrEmpty(username))
+            {
+                var newUser = new UserModel { Username = username, Balance = 0 };
+                await _viewModel.AddUserAsync(newUser);
+            }
+        }
+
+        private async void OnRemoveUser()
+        {
+            string userIdStr = await DisplayPromptAsync("Odebrat zákazníka", "Zadejte ID zákazníka, kterého chcete odebrat:");
+            if (int.TryParse(userIdStr, out int userId))
+            {
+                await _viewModel.RemoveUserAsync(userId);
             }
         }
     }

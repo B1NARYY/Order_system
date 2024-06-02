@@ -24,13 +24,6 @@ namespace PVfinal
             };
             tabBar.Items.Add(mainPageTab);
 
-            var orderPageTab = new ShellContent
-            {
-                Title = "Orders",
-                Content = new OrderPage()
-            };
-            tabBar.Items.Add(orderPageTab);
-
             Items.Add(tabBar);
 
             // Registrace cest pro navigaci
