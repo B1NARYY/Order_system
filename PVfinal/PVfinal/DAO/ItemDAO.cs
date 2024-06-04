@@ -1,13 +1,12 @@
-﻿using PVfinal.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using PVfinal.Models;
 
 namespace PVfinal.DAO
 {
     public class ItemDAO
     {
-        // Method to get all items
         public static List<ItemModel> GetAllItems()
         {
             List<ItemModel> items = new List<ItemModel>();
@@ -36,7 +35,6 @@ namespace PVfinal.DAO
             return items;
         }
 
-        // Method to get a single item by id
         public static ItemModel GetItem(int id)
         {
             using (SqlConnection conn = DatabaseSingleton.GetInstance())
@@ -63,7 +61,6 @@ namespace PVfinal.DAO
             return null;
         }
 
-        // Method to add an item
         public static void AddItem(ItemModel item)
         {
             using (SqlConnection conn = DatabaseSingleton.GetInstance())
@@ -74,10 +71,8 @@ namespace PVfinal.DAO
                 cmd.Parameters.AddWithValue("@price", item.Price);
                 cmd.ExecuteNonQuery();
             }
-            Console.WriteLine("Item added successfully");
         }
 
-        // Method to update an item
         public static void UpdateItem(ItemModel item)
         {
             using (SqlConnection conn = DatabaseSingleton.GetInstance())
@@ -89,10 +84,8 @@ namespace PVfinal.DAO
                 cmd.Parameters.AddWithValue("@price", item.Price);
                 cmd.ExecuteNonQuery();
             }
-            Console.WriteLine("Item updated successfully");
         }
 
-        // Method to delete an item
         public static void DeleteItem(int itemId)
         {
             using (SqlConnection conn = DatabaseSingleton.GetInstance())
@@ -102,7 +95,6 @@ namespace PVfinal.DAO
                 cmd.Parameters.AddWithValue("@itemId", itemId);
                 cmd.ExecuteNonQuery();
             }
-            Console.WriteLine("Item deleted successfully");
         }
     }
 }

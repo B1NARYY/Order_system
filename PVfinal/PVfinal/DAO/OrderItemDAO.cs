@@ -104,5 +104,17 @@ namespace PVfinal.DAO
             }
             Console.WriteLine("Order item deleted successfully");
         }
+
+        public static void DeleteOrderItemsByOrderId(int orderId)
+        {
+            using (SqlConnection conn = DatabaseSingleton.GetInstance())
+            {
+                string query = "DELETE FROM OrderItems WHERE order_id = @orderId";
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@orderId", orderId);
+                cmd.ExecuteNonQuery();
+            }
+            Console.WriteLine("Order items deleted successfully");
+        }
     }
 }

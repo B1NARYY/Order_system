@@ -13,48 +13,47 @@ namespace PVfinal.Views
             _viewModel = new MainViewModel();
             BindingContext = _viewModel;
 
-            Title = "Zákazníci";
+            Title = "Položky";
 
-            var usersListView = new ListView
+            var itemsListView = new ListView
             {
                 ItemTemplate = new DataTemplate(() =>
                 {
                     var nameLabel = new Label();
-                    nameLabel.SetBinding(Label.TextProperty, "Username");
+                    nameLabel.SetBinding(Label.TextProperty, "ItemName");
 
-                    var balanceLabel = new Label();
-                    balanceLabel.SetBinding(Label.TextProperty, new Binding("Balance", stringFormat: "{0:C}"));
+                    var priceLabel = new Label();
+                    priceLabel.SetBinding(Label.TextProperty, new Binding("Price", stringFormat: "{0:C}"));
 
                     return new ViewCell
                     {
                         View = new StackLayout
                         {
                             Orientation = StackOrientation.Horizontal,
-                            Children = { nameLabel, balanceLabel }
+                            Children = { nameLabel, priceLabel }
                         }
                     };
                 })
             };
-            usersListView.SetBinding(ListView.ItemsSourceProperty, nameof(MainViewModel.Users));
-            usersListView.ItemTapped += OnUserTapped;
+            itemsListView.SetBinding(ListView.ItemsSourceProperty, nameof(MainViewModel.Items));
 
             var addButton = new Button
             {
-                Text = "Přidat zákazníka",
-                Command = new Command(OnAddUser)
+                Text = "Přidat položku",
+                Command = new Command(OnAddItem)
             };
 
             var removeButton = new Button
             {
-                Text = "Odebrat zákazníka",
-                Command = new Command(OnRemoveUser)
+                Text = "Odebrat položku",
+                Command = new Command(OnRemoveItem)
             };
 
             Content = new StackLayout
             {
                 Children =
                 {
-                    usersListView,
+                    itemsListView,
                     new StackLayout
                     {
                         Orientation = StackOrientation.Horizontal,
@@ -63,33 +62,27 @@ namespace PVfinal.Views
                 }
             };
 
-            _viewModel.LoadUsersCommand.Execute(null);
+            _viewModel.LoadItemsCommand.Execute(null);
         }
 
-        private async void OnUserTapped(object sender, ItemTappedEventArgs e)
+        private async void OnAddItem()
         {
-            if (e.Item is UserModel user)
+            string itemName = await DisplayPromptAsync("Přidat položku", "Zadejte název položky:");
+            string priceStr = await DisplayPromptAsync("Přidat položku", "Zadejte cenu položky:", keyboard: Keyboard.Numeric);
+
+            if (!string.IsNullOrEmpty(itemName) && decimal.TryParse(priceStr, out decimal price))
             {
-                await Navigation.PushAsync(new OrderPage(user));
+                var newItem = new ItemModel { ItemName = itemName, Price = price };
+                await _viewModel.AddItemAsync(newItem);
             }
         }
 
-        private async void OnAddUser()
+        private async void OnRemoveItem()
         {
-            string username = await DisplayPromptAsync("Přidat zákazníka", "Zadejte jméno zákazníka:");
-            if (!string.IsNullOrEmpty(username))
+            string itemIdStr = await DisplayPromptAsync("Odebrat položku", "Zadejte ID položky, kterou chcete odebrat:");
+            if (int.TryParse(itemIdStr, out int itemId))
             {
-                var newUser = new UserModel { Username = username, Balance = 0 };
-                await _viewModel.AddUserAsync(newUser);
-            }
-        }
-
-        private async void OnRemoveUser()
-        {
-            string userIdStr = await DisplayPromptAsync("Odebrat zákazníka", "Zadejte ID zákazníka, kterého chcete odebrat:");
-            if (int.TryParse(userIdStr, out int userId))
-            {
-                await _viewModel.RemoveUserAsync(userId);
+                await _viewModel.RemoveItemAsync(itemId);
             }
         }
     }

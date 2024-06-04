@@ -17,6 +17,11 @@ namespace PVfinal.Services
             return await Task.Run(() => OrderDAO.GetOrder(id));
         }
 
+        public async Task<IEnumerable<OrderModel>> GetOrdersByUserIdAsync(int userId)
+        {
+            return await Task.Run(() => OrderDAO.GetOrdersByUserId(userId));
+        }
+
         public async Task AddOrderAsync(OrderModel order)
         {
             await Task.Run(() => OrderDAO.AddOrder(order));

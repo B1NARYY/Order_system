@@ -5,7 +5,7 @@ using PVfinal.DAO;
 
 namespace PVfinal.Services
 {
-    public class ItemService : IItemStore
+    public class ItemService
     {
         public async Task<IEnumerable<ItemModel>> GetItemsAsync()
         {

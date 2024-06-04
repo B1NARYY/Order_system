@@ -5,7 +5,9 @@ VisualStudioVersion = 17.10.34916.146
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PVfinal.Android", "PVfinal\PVfinal.Android\PVfinal.Android.csproj", "{14A2DBEE-6B8C-49A7-96D9-85CF4497B96D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PVfinal", "PVfinal\PVfinal\PVfinal.csproj", "{AD3DB77C-61E7-4DF1-8E6C-55C2E98BC02D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PVfinal", "PVfinal\PVfinal\PVfinal.csproj", "{AD3DB77C-61E7-4DF1-8E6C-55C2E98BC02D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PVfinal.Tests", "PVfinal.Tests\PVfinal.Tests.csproj", "{9227A335-CE6C-4939-900E-46AAA6DD2E98}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,6 +27,10 @@ Global
 		{AD3DB77C-61E7-4DF1-8E6C-55C2E98BC02D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AD3DB77C-61E7-4DF1-8E6C-55C2E98BC02D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AD3DB77C-61E7-4DF1-8E6C-55C2E98BC02D}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{9227A335-CE6C-4939-900E-46AAA6DD2E98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9227A335-CE6C-4939-900E-46AAA6DD2E98}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9227A335-CE6C-4939-900E-46AAA6DD2E98}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9227A335-CE6C-4939-900E-46AAA6DD2E98}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
